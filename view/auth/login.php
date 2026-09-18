@@ -1,3 +1,90 @@
-<?php 
-$title='Local Explorer Login'; ?>
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title><?= e($title) ?></title><link rel="stylesheet" href="public/style.css"></head><body class="auth-body"><div class="auth-card"><div class="auth-logo">LE</div><h1>Welcome Back</h1><p class="muted">Sign in to your Local Explorer account</p><?php if(!empty($error)): ?><div class="alert error"><?= e($error) ?></div><?php endif; ?><?php if(isset($_GET['registered'])): ?><div class="alert success">Registration successful. Please login.</div><?php endif; ?><form method="post" action="<?= pageUrl('login') ?>"><label>Email</label><input type="email" name="email" required><label>Password</label><input type="password" name="password" required><button class="btn primary full">Login</button></form><p class="auth-link">Don't have an account? <a href="<?= pageUrl('register') ?>">Create one</a></p></div></body></html>
+<!doctype html>
+
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Provider Login</title>
+
+    <link rel="stylesheet" href="assets/style.css">
+
+</head>
+
+<body class="auth-page">
+
+<div class="auth-card">
+
+    <h1>Service Provider</h1>
+
+    <p class="muted">
+        Sign in to manage your services
+    </p>
+
+    <?php if ($error): ?>
+
+        <div class="alert danger">
+            <?= htmlspecialchars($error) ?>
+        </div>
+
+    <?php endif; ?>
+
+    <?php if ($msg): ?>
+
+        <div class="alert success">
+            <?= htmlspecialchars($msg) ?>
+        </div>
+
+    <?php endif; ?>
+
+    <form method="post" id="loginForm" novalidate>
+
+        <label>Email</label>
+
+        <input
+            type="email"
+            name="email"
+            required
+        >
+
+        <label>Password</label>
+
+        <input
+            type="password"
+            name="password"
+            required
+        >
+
+        <button
+            type="submit"
+            class="btn primary full"
+        >
+            Login
+        </button>
+
+    </form>
+
+    <div class="auth-switch">
+        Don't have an account?
+        <a href="register.php">Sign up here</a>
+    </div>
+
+</div>
+
+<script src="assets/js/validate.js"></script>
+<script>
+    SPValidate.attach(document.getElementById('loginForm'), {
+        email: [
+            { required: true, message: 'Email is required.' },
+            { email: true, message: 'Please enter a valid email address.' }
+        ],
+        password: [
+            { required: true, message: 'Password is required.' }
+        ]
+    });
+</script>
+
+</body>
+
+</html>

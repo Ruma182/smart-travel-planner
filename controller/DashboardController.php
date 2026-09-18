@@ -1,15 +1,50 @@
 <?php
-class DashboardController {
-    private $conn;
-    public function __construct($conn) { $this->conn=$conn; }
-    public function index() {
-        requireLogin();
-        $id=$_SESSION['explorer_id'];
-        $counts=[];
-        foreach (['local_recommendation','travel_tip','destination_info','question_response','explorer_feedback'] as $table) {
-            $stmt=$this->conn->prepare("SELECT COUNT(*) AS c FROM $table WHERE explorer_id=?"); $stmt->bind_param("i",$id); $stmt->execute(); $counts[$table]=$stmt->get_result()->fetch_assoc()['c'];
-        }
-        require __DIR__ . '/../views/dashboard/dashboard.php';
+/**
+ * Controller: the provider's overview dashboard.
+ */
+class DashboardController extends Controller
+{
+    private ListingModel $listings;
+    private BookingModel $bookings;
+    private FeedbackModel $feedback;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $conn = Database::getConnection();
+        $this->listings = new ListingModel($conn);
+        $this->bookings = new BookingModel($conn);
+        $this->feedback = new FeedbackModel($conn);
+    }
+
+    public function index()
+    {
+        $providerId = $this->providerId;
+
+        $totalListings = $this->listings->count($providerId);
+        $available = $this->listings->sumAvailable($providerId);
+
+        $pending = $this->bookings->countByStatus($providerId, 'Pending');
+        $confirmed = $this->bookings->countByStatus($providerId, 'Confirmed');
+        $rejected = $this->bookings->countByStatus($providerId, 'Rejected');
+        $revenue = $this->bookings->sumRevenue($providerId);
+
+        $rating = $this->feedback->avgRating($providerId);
+        $feedbackCount = $this->feedback->count($providerId);
+
+        $rows = $this->bookings->getRecent($providerId, 5);
+
+        $this->render('dashboard/index', compact(
+            'totalListings',
+            'available',
+            'pending',
+            'confirmed',
+            'rejected',
+            'revenue',
+            'rating',
+            'feedbackCount',
+            'rows'
+        ));
     }
 }
-?>
