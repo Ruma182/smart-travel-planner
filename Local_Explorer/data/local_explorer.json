@@ -1,0 +1,26 @@
+{
+  "app_name": "SmartTravel",
+  "role": "Local Explorer",
+  "categories": [
+    "Nature",
+    "Food",
+    "Event",
+    "Culture",
+    "Hidden Place"
+  ],
+  "activities": [
+    "Photography",
+    "Local Food",
+    "Hiking",
+    "Cultural Experience",
+    "Sightseeing",
+    "Shopping"
+  ],
+  "features": [
+    "Local Destination Recommendations",
+    "Travel Tips & Experiences",
+    "Destination Information",
+    "Traveler Questions",
+    "Feedback & Ratings"
+  ]
+}
